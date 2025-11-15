@@ -1,7 +1,7 @@
 # Hugo Paper Theme - Release Package
 
-**Version**: 0.7.2
-**Release Date**: 2025-11-15 06:16:26
+**Version**: 0.7.9
+**Release Date**: 2025-11-15 09:12:29
 
 ## What's Included
 
