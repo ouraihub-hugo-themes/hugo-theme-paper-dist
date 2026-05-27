@@ -1,0 +1,19 @@
+{{- /* Notice box: {{< notice info >}}Content{{< /notice >}} */ -}}
+{{- /* Types: info, warning, danger, tip */ -}}
+{{- $type := .Get 0 | default "info" -}}
+{{- $colors := dict
+  "info" "border-blue-500 bg-blue-500/10"
+  "tip" "border-green-500 bg-green-500/10"
+  "warning" "border-yellow-500 bg-yellow-500/10"
+  "danger" "border-red-500 bg-red-500/10"
+-}}
+{{- $icons := dict
+  "info" "ℹ️"
+  "tip" "💡"
+  "warning" "⚠️"
+  "danger" "🚨"
+-}}
+<div class="my-6 rounded-lg border-l-4 p-4 {{ index $colors $type }}">
+  <span class="mr-2">{{ index $icons $type }}</span>
+  <div class="inline">{{ .Inner | markdownify }}</div>
+</div>

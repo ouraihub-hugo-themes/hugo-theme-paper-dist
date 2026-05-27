@@ -1,0 +1,23 @@
+{{- /* Enhanced figure: {{< figure src="img.jpg" caption="Description" alt="Alt text" width="800" >}} */ -}}
+{{- $src := .Get "src" -}}
+{{- $caption := .Get "caption" -}}
+{{- $alt := .Get "alt" | default $caption -}}
+{{- $width := .Get "width" -}}
+{{- $height := .Get "height" -}}
+{{- $cdn := site.Params.image.cdn | default "" -}}
+{{- $fullSrc := $src -}}
+{{- if and $cdn (not (hasPrefix $src "http")) -}}
+  {{- $fullSrc = printf "%s/%s" $cdn $src -}}
+{{- end -}}
+<figure class="my-6">
+  <img
+    src="{{ $fullSrc }}"
+    alt="{{ $alt }}"
+    {{ with $width }}width="{{ . }}"{{ end }}
+    {{ with $height }}height="{{ . }}"{{ end }}
+    loading="lazy"
+    decoding="async"
+    class="mx-auto rounded-lg border border-border"
+  />
+  {{ with $caption }}<figcaption class="mt-2 text-center text-sm opacity-75">{{ . }}</figcaption>{{ end }}
+</figure>

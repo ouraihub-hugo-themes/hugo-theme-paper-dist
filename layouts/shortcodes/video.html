@@ -1,0 +1,15 @@
+{{- /* Video player: {{< video src="demo.mp4" poster="thumb.jpg" >}} */ -}}
+{{- $src := .Get "src" -}}
+{{- $poster := .Get "poster" -}}
+{{- $autoplay := .Get "autoplay" | default "false" -}}
+<div class="my-6 overflow-hidden rounded-lg border border-border">
+  <video
+    controls
+    {{ with $poster }}poster="{{ . }}"{{ end }}
+    {{ if eq $autoplay "true" }}autoplay muted{{ end }}
+    preload="metadata"
+    class="w-full"
+  >
+    <source src="{{ $src }}" type="video/{{ path.Ext $src | strings.TrimPrefix "." }}">
+  </video>
+</div>

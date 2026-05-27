@@ -1,6 +1,7 @@
 # 中文翻译 - Hugo Paper 主题
 
 [nav]
+home = "首页"
 posts = "文章"
 tags = "标签"
 about = "关于"
@@ -30,6 +31,10 @@ next = "下一页"
 copyright = "版权所有 ©"
 allRightsReserved = "保留所有权利。"
 socialLinks = "社交链接："
+about = "关于"
+contact = "联系"
+privacy = "隐私"
+terms = "条款"
 
 [language]
 switchTo = "切换到"

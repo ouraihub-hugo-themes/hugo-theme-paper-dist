@@ -1,0 +1,48 @@
+{{- /*
+  CDN Image Component
+  
+  Usage: {{ partial "cdn-image.html" (dict "src" "path/to/image.jpg" "alt" "description" "width" 800 "height" 600 "class" "rounded-lg" "fit" "cover") }}
+  
+  Config (params.toml):
+    [image]
+    cdn = "https://your-r2-cdn.example.com"
+    resize = true
+*/ -}}
+
+{{- $src := .src -}}
+{{- $alt := .alt | default "" -}}
+{{- $width := .width -}}
+{{- $height := .height -}}
+{{- $class := .class | default "" -}}
+{{- $fit := .fit | default "cover" -}}
+
+{{- $cdn := site.Params.image.cdn | default "" -}}
+{{- $resize := site.Params.image.resize | default false -}}
+
+{{- /* Build full URL: absolute URLs pass through, relative paths get CDN prefix */ -}}
+{{- $fullSrc := $src -}}
+{{- if not (hasPrefix $src "http") -}}
+  {{- if $cdn -}}
+    {{- $fullSrc = printf "%s/%s" $cdn $src -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* Apply Worker resize if enabled and it's our own CDN */ -}}
+{{- $optimizedSrc := $fullSrc -}}
+{{- if and $resize $width (not (hasPrefix $src "http")) $cdn -}}
+  {{- $params := printf "w=%d,fit=%s,f=auto,q=80" $width $fit -}}
+  {{- if $height -}}
+    {{- $params = printf "w=%d,h=%d,fit=%s,f=auto,q=80" $width $height $fit -}}
+  {{- end -}}
+  {{- $optimizedSrc = printf "%s/resize/%s/%s" $cdn $params $src -}}
+{{- end -}}
+
+<img
+  src="{{ $optimizedSrc }}"
+  alt="{{ $alt }}"
+  {{- with $width }} width="{{ . }}"{{ end }}
+  {{- with $height }} height="{{ . }}"{{ end }}
+  loading="lazy"
+  decoding="async"
+  {{- with $class }} class="{{ . }}"{{ end }}
+/>

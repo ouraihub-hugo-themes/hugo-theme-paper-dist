@@ -1,0 +1,9 @@
+{{- /* Audio player: {{< audio src="podcast.mp3" title="Episode 1" >}} */ -}}
+{{- $src := .Get "src" -}}
+{{- $title := .Get "title" -}}
+<div class="my-6 rounded-lg border border-border bg-muted/10 p-4">
+  {{ with $title }}<p class="mb-2 text-sm font-medium">{{ . }}</p>{{ end }}
+  <audio controls preload="metadata" class="w-full">
+    <source src="{{ $src }}" type="audio/{{ path.Ext $src | strings.TrimPrefix "." }}">
+  </audio>
+</div>

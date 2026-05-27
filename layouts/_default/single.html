@@ -53,17 +53,17 @@
     {{- end }}
 
     {{- /* Back to Top Button */ -}}
-    {{ partial "back-to-top.html" . }}
+    {{ partial "shared/back-to-top.html" . }}
 
     {{- /* Share Links */ -}}
-    {{ partial "share-links.html" . }}
+    {{ partial "shared/share-links.html" . }}
 
     <hr class="my-6 border-dashed border-border" />
 
     {{- /* Previous/Next Post Navigation */ -}}
     <div data-pagefind-ignore class="grid grid-cols-1 gap-6 sm:grid-cols-2">
       {{- with .PrevInSection }}
-        <a href="{{ .Permalink }}" class="flex w-full gap-1 hover:opacity-75">
+        <a href="{{ .Permalink }}" class="flex w-full gap-1 hover:opacity-75" aria-label="Previous post: {{ .Title }}">
           <svg 
             class="inline-block flex-none rtl:rotate-180" 
             width="24" 
@@ -85,7 +85,7 @@
       {{- end }}
       
       {{- with .NextInSection }}
-        <a href="{{ .Permalink }}" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2">
+        <a href="{{ .Permalink }}" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2" aria-label="Next post: {{ .Title }}">
           <div>
             <span>Next Post</span>
             <div class="text-sm text-accent/85">{{ .Title }}</div>
@@ -106,91 +106,36 @@
         </a>
       {{- end }}
     </div>
+
+    {{- /* FAQ Section (from frontmatter) */ -}}
+    {{- if .Params.faq }}
+    <section class="mx-auto mt-12 max-w-prose px-4">
+      <h2 class="text-2xl font-semibold mb-6">FAQ</h2>
+      <dl class="space-y-4">
+        {{- range .Params.faq }}
+        <div>
+          <dt class="font-medium">{{ .q }}</dt>
+          <dd class="mt-1 opacity-80">{{ .a }}</dd>
+        </div>
+        {{- end }}
+      </dl>
+    </section>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {{- range $i, $item := .Params.faq }}
+        {{- if $i }},{{ end }}
+        {
+          "@type": "Question",
+          "name": {{ $item.q | jsonify }},
+          "acceptedAnswer": { "@type": "Answer", "text": {{ $item.a | jsonify }} }
+        }
+        {{- end }}
+      ]
+    }
+    </script>
+    {{- end }}
   </main>
-  
-  {{- /* Reading Progress Bar Script */ -}}
-  <script>
-    (function() {
-      // Create progress bar
-      function createProgressBar() {
-        const progressContainer = document.createElement("div");
-        progressContainer.className = "progress-container fixed top-0 z-10 h-1 w-full bg-background";
-
-        const progressBar = document.createElement("div");
-        progressBar.className = "progress-bar h-1 w-0 bg-accent";
-        progressBar.id = "myBar";
-
-        progressContainer.appendChild(progressBar);
-        document.body.appendChild(progressContainer);
-      }
-      createProgressBar();
-
-      // Update progress bar on scroll
-      function updateScrollProgress() {
-        document.addEventListener("scroll", () => {
-          const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-          const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-          const scrolled = (winScroll / height) * 100;
-          const myBar = document.getElementById("myBar");
-          if (myBar) {
-            myBar.style.width = scrolled + "%";
-          }
-        });
-      }
-      updateScrollProgress();
-
-      // Add heading links
-      function addHeadingLinks() {
-        const headings = Array.from(document.querySelectorAll("h2, h3, h4, h5, h6"));
-        for (const heading of headings) {
-          heading.classList.add("group");
-          const link = document.createElement("a");
-          link.className = "heading-link ms-2 no-underline opacity-75 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100";
-          link.href = "#" + heading.id;
-
-          const span = document.createElement("span");
-          span.ariaHidden = "true";
-          span.innerText = "#";
-          link.appendChild(span);
-          heading.appendChild(link);
-        }
-      }
-      addHeadingLinks();
-
-      // Attach copy buttons to code blocks
-      function attachCopyButtons() {
-        const copyButtonLabel = "Copy";
-        const codeBlocks = Array.from(document.querySelectorAll("pre"));
-
-        for (const codeBlock of codeBlocks) {
-          const wrapper = document.createElement("div");
-          wrapper.style.position = "relative";
-
-          const computedStyle = getComputedStyle(codeBlock);
-          const hasFileNameOffset = computedStyle.getPropertyValue("--file-name-offset").trim() !== "";
-          const topClass = hasFileNameOffset ? "top-(--file-name-offset)" : "-top-3";
-
-          const copyButton = document.createElement("button");
-          copyButton.className = `copy-code absolute end-3 ${topClass} rounded bg-muted border border-muted px-2 py-1 text-xs leading-4 text-foreground font-medium`;
-          copyButton.innerHTML = copyButtonLabel;
-          codeBlock.setAttribute("tabindex", "0");
-          codeBlock.appendChild(copyButton);
-
-          codeBlock?.parentNode?.insertBefore(wrapper, codeBlock);
-          wrapper.appendChild(codeBlock);
-
-          copyButton.addEventListener("click", async () => {
-            const code = codeBlock.querySelector("code");
-            const text = code?.innerText;
-            await navigator.clipboard.writeText(text ?? "");
-            copyButton.innerText = "Copied";
-            setTimeout(() => {
-              copyButton.innerText = copyButtonLabel;
-            }, 700);
-          });
-        }
-      }
-      attachCopyButtons();
-    })();
-  </script>
 {{- end -}}

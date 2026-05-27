@@ -15,7 +15,7 @@ Requirements: 21.6
   {{- if .IsTranslated -}}
     {{- /* 当前页面有翻译版本 */ -}}
     {{- range .Translations -}}
-      {{- $switchText := printf "Switch to %s" .Language.LanguageName -}}
+      {{- $switchText := printf "Switch to %s" .Language.Label -}}
       <a href="{{ .Permalink }}" class="focus-outline p-1 text-sm font-medium hover:text-accent" title="{{ $switchText }}" aria-label="{{ $switchText }}">
         {{- if eq .Language.Lang "zh" -}}中{{- else -}}EN{{- end -}}
       </a>
@@ -36,7 +36,7 @@ Requirements: 21.6
         
         {{- /* 构建目标语言的 URL */ -}}
         {{- $targetURL := printf "/%s/%s" $targetLang $pathWithoutLang -}}
-        {{- $switchText := printf "Switch to %s" .LanguageName -}}
+        {{- $switchText := printf "Switch to %s" .Label -}}
         
         <a href="{{ $targetURL | relURL }}" class="focus-outline p-1 text-sm font-medium hover:text-accent" title="{{ $switchText }}" aria-label="{{ $switchText }}">
           {{- if eq .Lang "zh" -}}中{{- else -}}EN{{- end -}}

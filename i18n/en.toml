@@ -1,6 +1,7 @@
 # English Translations for Hugo Paper Theme
 
 [nav]
+home = "Home"
 posts = "Posts"
 tags = "Tags"
 about = "About"
@@ -30,6 +31,10 @@ next = "Next"
 copyright = "Copyright ©"
 allRightsReserved = "All rights reserved."
 socialLinks = "Social Links:"
+about = "About"
+contact = "Contact"
+privacy = "Privacy"
+terms = "Terms"
 
 [language]
 switchTo = "Switch to"

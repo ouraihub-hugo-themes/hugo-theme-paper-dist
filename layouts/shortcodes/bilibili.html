@@ -1,0 +1,12 @@
+{{- /* Bilibili embed: {{< bilibili BV1xx >}} or {{< bilibili BV1xx 1 >}} (with page) */ -}}
+{{- $id := .Get 0 -}}
+{{- $page := .Get 1 | default "1" -}}
+<div class="my-6 aspect-video overflow-hidden rounded-lg border border-border">
+  <iframe
+    src="https://player.bilibili.com/player.html?bvid={{ $id }}&page={{ $page }}&high_quality=1"
+    title="Bilibili video"
+    allowfullscreen
+    loading="lazy"
+    class="h-full w-full"
+  ></iframe>
+</div>

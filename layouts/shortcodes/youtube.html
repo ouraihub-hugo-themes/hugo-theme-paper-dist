@@ -1,0 +1,11 @@
+{{- /* YouTube embed: {{< youtube VIDEO_ID >}} */ -}}
+<div class="my-6 aspect-video overflow-hidden rounded-lg border border-border">
+  <iframe
+    src="https://www.youtube-nocookie.com/embed/{{ .Get 0 }}"
+    title="YouTube video"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+    loading="lazy"
+    class="h-full w-full"
+  ></iframe>
+</div>
