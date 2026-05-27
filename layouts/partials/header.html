@@ -104,19 +104,13 @@
             {{- if eq $currentPath $menuPath -}}
               {{- $isActive = true -}}
             {{- else if and (gt (len $currentPathArray) 0) (gt (len $menuPathArray) 0) -}}
-              {{- /* 跳过语言前缀（非默认语言的路径以 lang code 开头） */ -}}
-              {{- $lang := $.Page.Language.Lang -}}
-              {{- $defaultLang := site.Home.Language.Lang -}}
+              {{- /* 页面路径可能有语言前缀（如 /zh/post/...），菜单 URL 没有（如 /post/） */ -}}
               {{- $cIdx := 0 -}}
-              {{- $mIdx := 0 -}}
-              {{- if and (ne $lang $defaultLang) (gt (len $currentPathArray) 1) (eq (index $currentPathArray 0) $lang) -}}
+              {{- if and (gt (len $currentPathArray) 1) (eq (index $currentPathArray 0) $.Page.Language.Lang) -}}
                 {{- $cIdx = 1 -}}
               {{- end -}}
-              {{- if and (ne $lang $defaultLang) (gt (len $menuPathArray) 1) (eq (index $menuPathArray 0) $lang) -}}
-                {{- $mIdx = 1 -}}
-              {{- end -}}
-              {{- if and (gt (len $currentPathArray) $cIdx) (gt (len $menuPathArray) $mIdx) -}}
-                {{- if eq (index $currentPathArray $cIdx) (index $menuPathArray $mIdx) -}}
+              {{- if gt (len $currentPathArray) $cIdx -}}
+                {{- if eq (index $currentPathArray $cIdx) (index $menuPathArray 0) -}}
                   {{- $isActive = true -}}
                 {{- end -}}
               {{- end -}}
