@@ -100,12 +100,23 @@
               {{- end -}}
             {{- end -}}
             
-            {{- /* 检查是否匹配：完整路径相同 或 第一段路径相同 */ -}}
+            {{- /* 检查是否匹配：完整路径相同 或 关键路径段相同（跳过语言前缀） */ -}}
             {{- if eq $currentPath $menuPath -}}
               {{- $isActive = true -}}
             {{- else if and (gt (len $currentPathArray) 0) (gt (len $menuPathArray) 0) -}}
-              {{- if eq (index $currentPathArray 0) (index $menuPathArray 0) -}}
-                {{- $isActive = true -}}
+              {{- /* 跳过语言前缀（如 zh/en），比较实际路径段 */ -}}
+              {{- $cIdx := 0 -}}
+              {{- $mIdx := 0 -}}
+              {{- if and (gt (len $currentPathArray) 1) (in site.Languages.Keys (index $currentPathArray 0)) -}}
+                {{- $cIdx = 1 -}}
+              {{- end -}}
+              {{- if and (gt (len $menuPathArray) 1) (in site.Languages.Keys (index $menuPathArray 0)) -}}
+                {{- $mIdx = 1 -}}
+              {{- end -}}
+              {{- if and (gt (len $currentPathArray) $cIdx) (gt (len $menuPathArray) $mIdx) -}}
+                {{- if eq (index $currentPathArray $cIdx) (index $menuPathArray $mIdx) -}}
+                  {{- $isActive = true -}}
+                {{- end -}}
               {{- end -}}
             {{- end -}}
             
